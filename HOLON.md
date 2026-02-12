@@ -67,7 +67,7 @@ atlas cache clean              — purge the global cache
 
 - Proto file: `rhizome_atlas.proto`
 - Service: `RhizomeAtlasService`
-- RPCs: `Init`, `AddDependency`, `RemoveDependency`, `Pull`, `Update`,
+- RPCs: `Init`, `Add`, `Remove`, `Pull`, `Update`,
   `Verify`, `Graph`, `Vendor`, `CleanCache`
 
 ## Files Managed
