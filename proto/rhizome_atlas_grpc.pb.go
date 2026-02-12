@@ -19,12 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RhizomeAtlasService_Init_FullMethodName   = "/holon.rhizome_atlas.RhizomeAtlasService/Init"
-	RhizomeAtlasService_Add_FullMethodName    = "/holon.rhizome_atlas.RhizomeAtlasService/Add"
-	RhizomeAtlasService_Remove_FullMethodName = "/holon.rhizome_atlas.RhizomeAtlasService/Remove"
-	RhizomeAtlasService_Pull_FullMethodName   = "/holon.rhizome_atlas.RhizomeAtlasService/Pull"
-	RhizomeAtlasService_Verify_FullMethodName = "/holon.rhizome_atlas.RhizomeAtlasService/Verify"
-	RhizomeAtlasService_Graph_FullMethodName  = "/holon.rhizome_atlas.RhizomeAtlasService/Graph"
+	RhizomeAtlasService_Init_FullMethodName       = "/holon.rhizome_atlas.RhizomeAtlasService/Init"
+	RhizomeAtlasService_Add_FullMethodName        = "/holon.rhizome_atlas.RhizomeAtlasService/Add"
+	RhizomeAtlasService_Remove_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Remove"
+	RhizomeAtlasService_Pull_FullMethodName       = "/holon.rhizome_atlas.RhizomeAtlasService/Pull"
+	RhizomeAtlasService_Verify_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Verify"
+	RhizomeAtlasService_Graph_FullMethodName      = "/holon.rhizome_atlas.RhizomeAtlasService/Graph"
+	RhizomeAtlasService_Update_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Update"
+	RhizomeAtlasService_Vendor_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Vendor"
+	RhizomeAtlasService_CleanCache_FullMethodName = "/holon.rhizome_atlas.RhizomeAtlasService/CleanCache"
 )
 
 // RhizomeAtlasServiceClient is the client API for RhizomeAtlasService service.
@@ -47,6 +50,12 @@ type RhizomeAtlasServiceClient interface {
 	Verify(ctx context.Context, in *VerifyRequest, opts ...grpc.CallOption) (*VerifyResponse, error)
 	// Graph returns the dependency tree.
 	Graph(ctx context.Context, in *GraphRequest, opts ...grpc.CallOption) (*GraphResponse, error)
+	// Update updates dependencies to their latest compatible versions.
+	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
+	// Vendor copies cached dependencies to a local .holon/ directory.
+	Vendor(ctx context.Context, in *VendorRequest, opts ...grpc.CallOption) (*VendorResponse, error)
+	// CleanCache purges the global holon cache (~/.holon/cache/).
+	CleanCache(ctx context.Context, in *CleanCacheRequest, opts ...grpc.CallOption) (*CleanCacheResponse, error)
 }
 
 type rhizomeAtlasServiceClient struct {
@@ -117,6 +126,36 @@ func (c *rhizomeAtlasServiceClient) Graph(ctx context.Context, in *GraphRequest,
 	return out, nil
 }
 
+func (c *rhizomeAtlasServiceClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateResponse)
+	err := c.cc.Invoke(ctx, RhizomeAtlasService_Update_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *rhizomeAtlasServiceClient) Vendor(ctx context.Context, in *VendorRequest, opts ...grpc.CallOption) (*VendorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VendorResponse)
+	err := c.cc.Invoke(ctx, RhizomeAtlasService_Vendor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *rhizomeAtlasServiceClient) CleanCache(ctx context.Context, in *CleanCacheRequest, opts ...grpc.CallOption) (*CleanCacheResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CleanCacheResponse)
+	err := c.cc.Invoke(ctx, RhizomeAtlasService_CleanCache_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RhizomeAtlasServiceServer is the server API for RhizomeAtlasService service.
 // All implementations must embed UnimplementedRhizomeAtlasServiceServer
 // for forward compatibility.
@@ -137,6 +176,12 @@ type RhizomeAtlasServiceServer interface {
 	Verify(context.Context, *VerifyRequest) (*VerifyResponse, error)
 	// Graph returns the dependency tree.
 	Graph(context.Context, *GraphRequest) (*GraphResponse, error)
+	// Update updates dependencies to their latest compatible versions.
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
+	// Vendor copies cached dependencies to a local .holon/ directory.
+	Vendor(context.Context, *VendorRequest) (*VendorResponse, error)
+	// CleanCache purges the global holon cache (~/.holon/cache/).
+	CleanCache(context.Context, *CleanCacheRequest) (*CleanCacheResponse, error)
 	mustEmbedUnimplementedRhizomeAtlasServiceServer()
 }
 
@@ -164,6 +209,15 @@ func (UnimplementedRhizomeAtlasServiceServer) Verify(context.Context, *VerifyReq
 }
 func (UnimplementedRhizomeAtlasServiceServer) Graph(context.Context, *GraphRequest) (*GraphResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Graph not implemented")
+}
+func (UnimplementedRhizomeAtlasServiceServer) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedRhizomeAtlasServiceServer) Vendor(context.Context, *VendorRequest) (*VendorResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Vendor not implemented")
+}
+func (UnimplementedRhizomeAtlasServiceServer) CleanCache(context.Context, *CleanCacheRequest) (*CleanCacheResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CleanCache not implemented")
 }
 func (UnimplementedRhizomeAtlasServiceServer) mustEmbedUnimplementedRhizomeAtlasServiceServer() {}
 func (UnimplementedRhizomeAtlasServiceServer) testEmbeddedByValue()                             {}
@@ -294,6 +348,60 @@ func _RhizomeAtlasService_Graph_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RhizomeAtlasService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RhizomeAtlasServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RhizomeAtlasService_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RhizomeAtlasServiceServer).Update(ctx, req.(*UpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RhizomeAtlasService_Vendor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VendorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RhizomeAtlasServiceServer).Vendor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RhizomeAtlasService_Vendor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RhizomeAtlasServiceServer).Vendor(ctx, req.(*VendorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RhizomeAtlasService_CleanCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CleanCacheRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RhizomeAtlasServiceServer).CleanCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RhizomeAtlasService_CleanCache_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RhizomeAtlasServiceServer).CleanCache(ctx, req.(*CleanCacheRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RhizomeAtlasService_ServiceDesc is the grpc.ServiceDesc for RhizomeAtlasService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +432,18 @@ var RhizomeAtlasService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Graph",
 			Handler:    _RhizomeAtlasService_Graph_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _RhizomeAtlasService_Update_Handler,
+		},
+		{
+			MethodName: "Vendor",
+			Handler:    _RhizomeAtlasService_Vendor_Handler,
+		},
+		{
+			MethodName: "CleanCache",
+			Handler:    _RhizomeAtlasService_CleanCache_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

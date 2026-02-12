@@ -6,11 +6,13 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/Organic-Programming/go-holons/pkg/serve"
@@ -286,6 +288,116 @@ func (s *Server) Graph(_ context.Context, req *pb.GraphRequest) (*pb.GraphRespon
 	}, nil
 }
 
+// Update checks remote git tags for each dependency and updates to the
+// latest compatible semver version. Follows Minimum Version Selection:
+// the latest tag that shares the same major version.
+func (s *Server) Update(_ context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+	dir := req.Directory
+	if dir == "" {
+		dir = "."
+	}
+
+	modPath := filepath.Join(dir, "holon.mod")
+	mod, err := modfile.Parse(modPath)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "parse holon.mod: %v", err)
+	}
+
+	var updated []*pb.UpdatedDependency
+	for i, dep := range mod.Require {
+		// Skip replaced dependencies
+		if mod.ResolvedPath(dep.Path) != "" {
+			continue
+		}
+
+		latest, err := latestCompatibleTag(dep.Path, dep.Version)
+		if err != nil {
+			log.Printf("atlas update: %s: %v (skipped)", dep.Path, err)
+			continue
+		}
+		if latest == dep.Version {
+			continue
+		}
+
+		// Remove old cache entry, fetch new
+		oldCache := cachePathFor(dep.Path, dep.Version)
+		os.RemoveAll(oldCache) //nolint:errcheck
+
+		mod.Require[i].Version = latest
+		updated = append(updated, &pb.UpdatedDependency{
+			Path:       dep.Path,
+			OldVersion: dep.Version,
+			NewVersion: latest,
+		})
+	}
+
+	if len(updated) > 0 {
+		if err := mod.Write(modPath); err != nil {
+			return nil, status.Errorf(codes.Internal, "write holon.mod: %v", err)
+		}
+	}
+
+	return &pb.UpdateResponse{Updated: updated}, nil
+}
+
+// Vendor copies all cached dependencies to a local .holon/ directory
+// next to holon.mod. If .holon/ exists, it is recreated.
+func (s *Server) Vendor(_ context.Context, req *pb.VendorRequest) (*pb.VendorResponse, error) {
+	dir := req.Directory
+	if dir == "" {
+		dir = "."
+	}
+
+	modPath := filepath.Join(dir, "holon.mod")
+	mod, err := modfile.Parse(modPath)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "parse holon.mod: %v", err)
+	}
+
+	vendorDir := filepath.Join(dir, ".holon")
+	// Clean existing vendor directory
+	os.RemoveAll(vendorDir) //nolint:errcheck
+
+	var vendored []*pb.Dependency
+	for _, dep := range mod.Require {
+		// Skip replaced dependencies
+		if mod.ResolvedPath(dep.Path) != "" {
+			continue
+		}
+
+		src := cachePathFor(dep.Path, dep.Version)
+		if _, err := os.Stat(src); os.IsNotExist(err) {
+			return nil, status.Errorf(codes.FailedPrecondition,
+				"%s@%s not in cache — run 'atlas pull' first", dep.Path, dep.Version)
+		}
+
+		// Destination: .holon/<last-path-component>/
+		name := filepath.Base(dep.Path)
+		dst := filepath.Join(vendorDir, name)
+
+		if err := copyDir(src, dst); err != nil {
+			return nil, status.Errorf(codes.Internal, "vendor %s: %v", dep.Path, err)
+		}
+
+		vendored = append(vendored, &pb.Dependency{
+			Path:      dep.Path,
+			Version:   dep.Version,
+			CachePath: dst,
+		})
+	}
+
+	return &pb.VendorResponse{Vendored: vendored}, nil
+}
+
+// CleanCache purges the global holon cache directory.
+func (s *Server) CleanCache(_ context.Context, _ *pb.CleanCacheRequest) (*pb.CleanCacheResponse, error) {
+	cacheDir := CacheDir()
+	if err := os.RemoveAll(cacheDir); err != nil {
+		return nil, status.Errorf(codes.Internal, "purge cache: %v", err)
+	}
+	return &pb.CleanCacheResponse{CachePath: cacheDir}, nil
+}
+
 // --- helpers ---
 
 // cachePathFor returns the cache directory for a dependency.
@@ -363,4 +475,112 @@ func hashFile(path string) (string, error) {
 	}
 	h := sha256.Sum256(data)
 	return hex.EncodeToString(h[:]), nil
+}
+
+// latestCompatibleTag queries remote git tags and returns the latest
+// version sharing the same major version (MVS-compatible).
+func latestCompatibleTag(depPath, currentVersion string) (string, error) {
+	gitURL := "https://" + depPath + ".git"
+
+	cmd := exec.Command("git", "ls-remote", "--tags", "--refs", gitURL)
+	out, err := cmd.Output()
+	if err != nil {
+		// Try without .git suffix
+		gitURL = "https://" + depPath
+		cmd = exec.Command("git", "ls-remote", "--tags", "--refs", gitURL)
+		out, err = cmd.Output()
+		if err != nil {
+			return "", fmt.Errorf("ls-remote %s: %w", depPath, err)
+		}
+	}
+
+	currentMajor, _, _, ok := parseSemver(currentVersion)
+	if !ok {
+		return currentVersion, nil
+	}
+
+	// Collect compatible tags (same major version)
+	var candidates []string
+	for _, line := range strings.Split(string(out), "\n") {
+		parts := strings.Fields(line)
+		if len(parts) < 2 {
+			continue
+		}
+		ref := parts[1]
+		tag := strings.TrimPrefix(ref, "refs/tags/")
+		major, _, _, ok := parseSemver(tag)
+		if ok && major == currentMajor {
+			candidates = append(candidates, tag)
+		}
+	}
+
+	if len(candidates) == 0 {
+		return currentVersion, nil
+	}
+
+	sort.Slice(candidates, func(i, j int) bool {
+		return compareSemver(candidates[i], candidates[j]) < 0
+	})
+
+	return candidates[len(candidates)-1], nil
+}
+
+// parseSemver extracts major, minor, patch from "vM.N.P".
+func parseSemver(v string) (major, minor, patch int, ok bool) {
+	v = strings.TrimPrefix(v, "v")
+	parts := strings.SplitN(v, ".", 3)
+	if len(parts) != 3 {
+		return 0, 0, 0, false
+	}
+	_, err1 := fmt.Sscan(parts[0], &major)
+	_, err2 := fmt.Sscan(parts[1], &minor)
+	_, err3 := fmt.Sscan(parts[2], &patch)
+	return major, minor, patch, err1 == nil && err2 == nil && err3 == nil
+}
+
+// compareSemver returns -1, 0, or 1.
+func compareSemver(a, b string) int {
+	ma, mia, pa, _ := parseSemver(a)
+	mb, mib, pb, _ := parseSemver(b)
+	if ma != mb {
+		return ma - mb
+	}
+	if mia != mib {
+		return mia - mib
+	}
+	return pa - pb
+}
+
+// copyDir recursively copies src to dst.
+func copyDir(src, dst string) error {
+	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		rel, _ := filepath.Rel(src, path)
+		target := filepath.Join(dst, rel)
+
+		if d.IsDir() {
+			return os.MkdirAll(target, 0o755)
+		}
+
+		srcFile, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer srcFile.Close()
+
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			return err
+		}
+		dstFile, err := os.Create(target)
+		if err != nil {
+			return err
+		}
+		defer dstFile.Close()
+
+		_, err = io.Copy(dstFile, srcFile)
+		return err
+	})
 }

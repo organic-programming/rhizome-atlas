@@ -99,3 +99,69 @@ func TestVerifyEmpty(t *testing.T) {
 		t.Errorf("verify should be ok with no deps, got errors: %v", resp.Errors)
 	}
 }
+
+func TestVendorAndCleanCache(t *testing.T) {
+	dir := t.TempDir()
+	ctx := context.Background()
+	srv := &server.Server{}
+
+	// Setup: init, add a real dep (go-holons has a v0.1.0 tag)
+	srv.Init(ctx, &pb.InitRequest{Directory: dir, HolonPath: "test/vendor"}) //nolint:errcheck
+	srv.Add(ctx, &pb.AddRequest{
+		Directory: dir,
+		Path:      "github.com/Organic-Programming/go-holons",
+		Version:   "v0.1.0",
+	}) //nolint:errcheck
+
+	// Vendor
+	vendorResp, err := srv.Vendor(ctx, &pb.VendorRequest{Directory: dir})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(vendorResp.Vendored) != 1 {
+		t.Fatalf("vendored = %d, want 1", len(vendorResp.Vendored))
+	}
+
+	// Check .holon/go-holons/ exists
+	vendored := filepath.Join(dir, ".holon", "go-holons")
+	if _, err := os.Stat(vendored); os.IsNotExist(err) {
+		t.Error(".holon/go-holons/ not created")
+	}
+
+	// Clean cache
+	cacheResp, err := srv.CleanCache(ctx, &pb.CleanCacheRequest{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cacheResp.CachePath == "" {
+		t.Error("expected cache_path in response")
+	}
+
+	// Verify cache is gone
+	if _, err := os.Stat(server.CacheDir()); !os.IsNotExist(err) {
+		t.Error("cache dir should not exist after clean")
+	}
+}
+
+func TestUpdateNoRemote(t *testing.T) {
+	dir := t.TempDir()
+	ctx := context.Background()
+	srv := &server.Server{}
+
+	// Setup with a fake dep (no remote to query)
+	srv.Init(ctx, &pb.InitRequest{Directory: dir, HolonPath: "test/up"}) //nolint:errcheck
+	srv.Add(ctx, &pb.AddRequest{
+		Directory: dir,
+		Path:      "github.com/test/nonexistent",
+		Version:   "v0.1.0",
+	}) //nolint:errcheck
+
+	// Update should not fail — just log and skip
+	resp, err := srv.Update(ctx, &pb.UpdateRequest{Directory: dir})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(resp.Updated) != 0 {
+		t.Errorf("expected 0 updates for unreachable dep, got %d", len(resp.Updated))
+	}
+}

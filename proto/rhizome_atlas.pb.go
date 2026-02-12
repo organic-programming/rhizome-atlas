@@ -665,6 +665,327 @@ func (x *Edge) GetVersion() string {
 	return ""
 }
 
+type UpdateRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Directory containing holon.mod.
+	Directory     string `protobuf:"bytes,1,opt,name=directory,proto3" json:"directory,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRequest) Reset() {
+	*x = UpdateRequest{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRequest) ProtoMessage() {}
+
+func (x *UpdateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRequest.ProtoReflect.Descriptor instead.
+func (*UpdateRequest) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *UpdateRequest) GetDirectory() string {
+	if x != nil {
+		return x.Directory
+	}
+	return ""
+}
+
+type UpdateResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Dependencies that were updated.
+	Updated       []*UpdatedDependency `protobuf:"bytes,1,rep,name=updated,proto3" json:"updated,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateResponse) Reset() {
+	*x = UpdateResponse{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateResponse) ProtoMessage() {}
+
+func (x *UpdateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateResponse.ProtoReflect.Descriptor instead.
+func (*UpdateResponse) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *UpdateResponse) GetUpdated() []*UpdatedDependency {
+	if x != nil {
+		return x.Updated
+	}
+	return nil
+}
+
+type UpdatedDependency struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	OldVersion    string                 `protobuf:"bytes,2,opt,name=old_version,json=oldVersion,proto3" json:"old_version,omitempty"`
+	NewVersion    string                 `protobuf:"bytes,3,opt,name=new_version,json=newVersion,proto3" json:"new_version,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdatedDependency) Reset() {
+	*x = UpdatedDependency{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatedDependency) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatedDependency) ProtoMessage() {}
+
+func (x *UpdatedDependency) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatedDependency.ProtoReflect.Descriptor instead.
+func (*UpdatedDependency) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *UpdatedDependency) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *UpdatedDependency) GetOldVersion() string {
+	if x != nil {
+		return x.OldVersion
+	}
+	return ""
+}
+
+func (x *UpdatedDependency) GetNewVersion() string {
+	if x != nil {
+		return x.NewVersion
+	}
+	return ""
+}
+
+type VendorRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Directory containing holon.mod.
+	Directory     string `protobuf:"bytes,1,opt,name=directory,proto3" json:"directory,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VendorRequest) Reset() {
+	*x = VendorRequest{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VendorRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VendorRequest) ProtoMessage() {}
+
+func (x *VendorRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VendorRequest.ProtoReflect.Descriptor instead.
+func (*VendorRequest) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *VendorRequest) GetDirectory() string {
+	if x != nil {
+		return x.Directory
+	}
+	return ""
+}
+
+type VendorResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Dependencies copied to .holon/.
+	Vendored      []*Dependency `protobuf:"bytes,1,rep,name=vendored,proto3" json:"vendored,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VendorResponse) Reset() {
+	*x = VendorResponse{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VendorResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VendorResponse) ProtoMessage() {}
+
+func (x *VendorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VendorResponse.ProtoReflect.Descriptor instead.
+func (*VendorResponse) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *VendorResponse) GetVendored() []*Dependency {
+	if x != nil {
+		return x.Vendored
+	}
+	return nil
+}
+
+type CleanCacheRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CleanCacheRequest) Reset() {
+	*x = CleanCacheRequest{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CleanCacheRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CleanCacheRequest) ProtoMessage() {}
+
+func (x *CleanCacheRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CleanCacheRequest.ProtoReflect.Descriptor instead.
+func (*CleanCacheRequest) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{18}
+}
+
+type CleanCacheResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Path that was purged.
+	CachePath     string `protobuf:"bytes,1,opt,name=cache_path,json=cachePath,proto3" json:"cache_path,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CleanCacheResponse) Reset() {
+	*x = CleanCacheResponse{}
+	mi := &file_api_rhizome_atlas_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CleanCacheResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CleanCacheResponse) ProtoMessage() {}
+
+func (x *CleanCacheResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_rhizome_atlas_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CleanCacheResponse.ProtoReflect.Descriptor instead.
+func (*CleanCacheResponse) Descriptor() ([]byte, []int) {
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *CleanCacheResponse) GetCachePath() string {
+	if x != nil {
+		return x.CachePath
+	}
+	return ""
+}
+
 type Dependency struct {
 	state   protoimpl.MessageState `protogen:"open.v1"`
 	Path    string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
@@ -677,7 +998,7 @@ type Dependency struct {
 
 func (x *Dependency) Reset() {
 	*x = Dependency{}
-	mi := &file_api_rhizome_atlas_proto_msgTypes[13]
+	mi := &file_api_rhizome_atlas_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -689,7 +1010,7 @@ func (x *Dependency) String() string {
 func (*Dependency) ProtoMessage() {}
 
 func (x *Dependency) ProtoReflect() protoreflect.Message {
-	mi := &file_api_rhizome_atlas_proto_msgTypes[13]
+	mi := &file_api_rhizome_atlas_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -702,7 +1023,7 @@ func (x *Dependency) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Dependency.ProtoReflect.Descriptor instead.
 func (*Dependency) Descriptor() ([]byte, []int) {
-	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{13}
+	return file_api_rhizome_atlas_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *Dependency) GetPath() string {
@@ -767,20 +1088,42 @@ const file_api_rhizome_atlas_proto_rawDesc = "" +
 	"\x04Edge\x12\x12\n" +
 	"\x04from\x18\x01 \x01(\tR\x04from\x12\x0e\n" +
 	"\x02to\x18\x02 \x01(\tR\x02to\x12\x18\n" +
-	"\aversion\x18\x03 \x01(\tR\aversion\"Y\n" +
+	"\aversion\x18\x03 \x01(\tR\aversion\"-\n" +
+	"\rUpdateRequest\x12\x1c\n" +
+	"\tdirectory\x18\x01 \x01(\tR\tdirectory\"R\n" +
+	"\x0eUpdateResponse\x12@\n" +
+	"\aupdated\x18\x01 \x03(\v2&.holon.rhizome_atlas.UpdatedDependencyR\aupdated\"i\n" +
+	"\x11UpdatedDependency\x12\x12\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\x12\x1f\n" +
+	"\vold_version\x18\x02 \x01(\tR\n" +
+	"oldVersion\x12\x1f\n" +
+	"\vnew_version\x18\x03 \x01(\tR\n" +
+	"newVersion\"-\n" +
+	"\rVendorRequest\x12\x1c\n" +
+	"\tdirectory\x18\x01 \x01(\tR\tdirectory\"M\n" +
+	"\x0eVendorResponse\x12;\n" +
+	"\bvendored\x18\x01 \x03(\v2\x1f.holon.rhizome_atlas.DependencyR\bvendored\"\x13\n" +
+	"\x11CleanCacheRequest\"3\n" +
+	"\x12CleanCacheResponse\x12\x1d\n" +
+	"\n" +
+	"cache_path\x18\x01 \x01(\tR\tcachePath\"Y\n" +
 	"\n" +
 	"Dependency\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x1d\n" +
 	"\n" +
-	"cache_path\x18\x03 \x01(\tR\tcachePath2\xef\x03\n" +
+	"cache_path\x18\x03 \x01(\tR\tcachePath2\xf4\x05\n" +
 	"\x13RhizomeAtlasService\x12K\n" +
 	"\x04Init\x12 .holon.rhizome_atlas.InitRequest\x1a!.holon.rhizome_atlas.InitResponse\x12H\n" +
 	"\x03Add\x12\x1f.holon.rhizome_atlas.AddRequest\x1a .holon.rhizome_atlas.AddResponse\x12Q\n" +
 	"\x06Remove\x12\".holon.rhizome_atlas.RemoveRequest\x1a#.holon.rhizome_atlas.RemoveResponse\x12K\n" +
 	"\x04Pull\x12 .holon.rhizome_atlas.PullRequest\x1a!.holon.rhizome_atlas.PullResponse\x12Q\n" +
 	"\x06Verify\x12\".holon.rhizome_atlas.VerifyRequest\x1a#.holon.rhizome_atlas.VerifyResponse\x12N\n" +
-	"\x05Graph\x12!.holon.rhizome_atlas.GraphRequest\x1a\".holon.rhizome_atlas.GraphResponseB4Z2github.com/Organic-Programming/rhizome-atlas/protob\x06proto3"
+	"\x05Graph\x12!.holon.rhizome_atlas.GraphRequest\x1a\".holon.rhizome_atlas.GraphResponse\x12Q\n" +
+	"\x06Update\x12\".holon.rhizome_atlas.UpdateRequest\x1a#.holon.rhizome_atlas.UpdateResponse\x12Q\n" +
+	"\x06Vendor\x12\".holon.rhizome_atlas.VendorRequest\x1a#.holon.rhizome_atlas.VendorResponse\x12]\n" +
+	"\n" +
+	"CleanCache\x12&.holon.rhizome_atlas.CleanCacheRequest\x1a'.holon.rhizome_atlas.CleanCacheResponseB4Z2github.com/Organic-Programming/rhizome-atlas/protob\x06proto3"
 
 var (
 	file_api_rhizome_atlas_proto_rawDescOnce sync.Once
@@ -794,44 +1137,59 @@ func file_api_rhizome_atlas_proto_rawDescGZIP() []byte {
 	return file_api_rhizome_atlas_proto_rawDescData
 }
 
-var file_api_rhizome_atlas_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_api_rhizome_atlas_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_api_rhizome_atlas_proto_goTypes = []any{
-	(*InitRequest)(nil),    // 0: holon.rhizome_atlas.InitRequest
-	(*InitResponse)(nil),   // 1: holon.rhizome_atlas.InitResponse
-	(*AddRequest)(nil),     // 2: holon.rhizome_atlas.AddRequest
-	(*AddResponse)(nil),    // 3: holon.rhizome_atlas.AddResponse
-	(*RemoveRequest)(nil),  // 4: holon.rhizome_atlas.RemoveRequest
-	(*RemoveResponse)(nil), // 5: holon.rhizome_atlas.RemoveResponse
-	(*PullRequest)(nil),    // 6: holon.rhizome_atlas.PullRequest
-	(*PullResponse)(nil),   // 7: holon.rhizome_atlas.PullResponse
-	(*VerifyRequest)(nil),  // 8: holon.rhizome_atlas.VerifyRequest
-	(*VerifyResponse)(nil), // 9: holon.rhizome_atlas.VerifyResponse
-	(*GraphRequest)(nil),   // 10: holon.rhizome_atlas.GraphRequest
-	(*GraphResponse)(nil),  // 11: holon.rhizome_atlas.GraphResponse
-	(*Edge)(nil),           // 12: holon.rhizome_atlas.Edge
-	(*Dependency)(nil),     // 13: holon.rhizome_atlas.Dependency
+	(*InitRequest)(nil),        // 0: holon.rhizome_atlas.InitRequest
+	(*InitResponse)(nil),       // 1: holon.rhizome_atlas.InitResponse
+	(*AddRequest)(nil),         // 2: holon.rhizome_atlas.AddRequest
+	(*AddResponse)(nil),        // 3: holon.rhizome_atlas.AddResponse
+	(*RemoveRequest)(nil),      // 4: holon.rhizome_atlas.RemoveRequest
+	(*RemoveResponse)(nil),     // 5: holon.rhizome_atlas.RemoveResponse
+	(*PullRequest)(nil),        // 6: holon.rhizome_atlas.PullRequest
+	(*PullResponse)(nil),       // 7: holon.rhizome_atlas.PullResponse
+	(*VerifyRequest)(nil),      // 8: holon.rhizome_atlas.VerifyRequest
+	(*VerifyResponse)(nil),     // 9: holon.rhizome_atlas.VerifyResponse
+	(*GraphRequest)(nil),       // 10: holon.rhizome_atlas.GraphRequest
+	(*GraphResponse)(nil),      // 11: holon.rhizome_atlas.GraphResponse
+	(*Edge)(nil),               // 12: holon.rhizome_atlas.Edge
+	(*UpdateRequest)(nil),      // 13: holon.rhizome_atlas.UpdateRequest
+	(*UpdateResponse)(nil),     // 14: holon.rhizome_atlas.UpdateResponse
+	(*UpdatedDependency)(nil),  // 15: holon.rhizome_atlas.UpdatedDependency
+	(*VendorRequest)(nil),      // 16: holon.rhizome_atlas.VendorRequest
+	(*VendorResponse)(nil),     // 17: holon.rhizome_atlas.VendorResponse
+	(*CleanCacheRequest)(nil),  // 18: holon.rhizome_atlas.CleanCacheRequest
+	(*CleanCacheResponse)(nil), // 19: holon.rhizome_atlas.CleanCacheResponse
+	(*Dependency)(nil),         // 20: holon.rhizome_atlas.Dependency
 }
 var file_api_rhizome_atlas_proto_depIdxs = []int32{
-	13, // 0: holon.rhizome_atlas.AddResponse.dependency:type_name -> holon.rhizome_atlas.Dependency
-	13, // 1: holon.rhizome_atlas.PullResponse.fetched:type_name -> holon.rhizome_atlas.Dependency
+	20, // 0: holon.rhizome_atlas.AddResponse.dependency:type_name -> holon.rhizome_atlas.Dependency
+	20, // 1: holon.rhizome_atlas.PullResponse.fetched:type_name -> holon.rhizome_atlas.Dependency
 	12, // 2: holon.rhizome_atlas.GraphResponse.edges:type_name -> holon.rhizome_atlas.Edge
-	0,  // 3: holon.rhizome_atlas.RhizomeAtlasService.Init:input_type -> holon.rhizome_atlas.InitRequest
-	2,  // 4: holon.rhizome_atlas.RhizomeAtlasService.Add:input_type -> holon.rhizome_atlas.AddRequest
-	4,  // 5: holon.rhizome_atlas.RhizomeAtlasService.Remove:input_type -> holon.rhizome_atlas.RemoveRequest
-	6,  // 6: holon.rhizome_atlas.RhizomeAtlasService.Pull:input_type -> holon.rhizome_atlas.PullRequest
-	8,  // 7: holon.rhizome_atlas.RhizomeAtlasService.Verify:input_type -> holon.rhizome_atlas.VerifyRequest
-	10, // 8: holon.rhizome_atlas.RhizomeAtlasService.Graph:input_type -> holon.rhizome_atlas.GraphRequest
-	1,  // 9: holon.rhizome_atlas.RhizomeAtlasService.Init:output_type -> holon.rhizome_atlas.InitResponse
-	3,  // 10: holon.rhizome_atlas.RhizomeAtlasService.Add:output_type -> holon.rhizome_atlas.AddResponse
-	5,  // 11: holon.rhizome_atlas.RhizomeAtlasService.Remove:output_type -> holon.rhizome_atlas.RemoveResponse
-	7,  // 12: holon.rhizome_atlas.RhizomeAtlasService.Pull:output_type -> holon.rhizome_atlas.PullResponse
-	9,  // 13: holon.rhizome_atlas.RhizomeAtlasService.Verify:output_type -> holon.rhizome_atlas.VerifyResponse
-	11, // 14: holon.rhizome_atlas.RhizomeAtlasService.Graph:output_type -> holon.rhizome_atlas.GraphResponse
-	9,  // [9:15] is the sub-list for method output_type
-	3,  // [3:9] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	15, // 3: holon.rhizome_atlas.UpdateResponse.updated:type_name -> holon.rhizome_atlas.UpdatedDependency
+	20, // 4: holon.rhizome_atlas.VendorResponse.vendored:type_name -> holon.rhizome_atlas.Dependency
+	0,  // 5: holon.rhizome_atlas.RhizomeAtlasService.Init:input_type -> holon.rhizome_atlas.InitRequest
+	2,  // 6: holon.rhizome_atlas.RhizomeAtlasService.Add:input_type -> holon.rhizome_atlas.AddRequest
+	4,  // 7: holon.rhizome_atlas.RhizomeAtlasService.Remove:input_type -> holon.rhizome_atlas.RemoveRequest
+	6,  // 8: holon.rhizome_atlas.RhizomeAtlasService.Pull:input_type -> holon.rhizome_atlas.PullRequest
+	8,  // 9: holon.rhizome_atlas.RhizomeAtlasService.Verify:input_type -> holon.rhizome_atlas.VerifyRequest
+	10, // 10: holon.rhizome_atlas.RhizomeAtlasService.Graph:input_type -> holon.rhizome_atlas.GraphRequest
+	13, // 11: holon.rhizome_atlas.RhizomeAtlasService.Update:input_type -> holon.rhizome_atlas.UpdateRequest
+	16, // 12: holon.rhizome_atlas.RhizomeAtlasService.Vendor:input_type -> holon.rhizome_atlas.VendorRequest
+	18, // 13: holon.rhizome_atlas.RhizomeAtlasService.CleanCache:input_type -> holon.rhizome_atlas.CleanCacheRequest
+	1,  // 14: holon.rhizome_atlas.RhizomeAtlasService.Init:output_type -> holon.rhizome_atlas.InitResponse
+	3,  // 15: holon.rhizome_atlas.RhizomeAtlasService.Add:output_type -> holon.rhizome_atlas.AddResponse
+	5,  // 16: holon.rhizome_atlas.RhizomeAtlasService.Remove:output_type -> holon.rhizome_atlas.RemoveResponse
+	7,  // 17: holon.rhizome_atlas.RhizomeAtlasService.Pull:output_type -> holon.rhizome_atlas.PullResponse
+	9,  // 18: holon.rhizome_atlas.RhizomeAtlasService.Verify:output_type -> holon.rhizome_atlas.VerifyResponse
+	11, // 19: holon.rhizome_atlas.RhizomeAtlasService.Graph:output_type -> holon.rhizome_atlas.GraphResponse
+	14, // 20: holon.rhizome_atlas.RhizomeAtlasService.Update:output_type -> holon.rhizome_atlas.UpdateResponse
+	17, // 21: holon.rhizome_atlas.RhizomeAtlasService.Vendor:output_type -> holon.rhizome_atlas.VendorResponse
+	19, // 22: holon.rhizome_atlas.RhizomeAtlasService.CleanCache:output_type -> holon.rhizome_atlas.CleanCacheResponse
+	14, // [14:23] is the sub-list for method output_type
+	5,  // [5:14] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_api_rhizome_atlas_proto_init() }
@@ -845,7 +1203,7 @@ func file_api_rhizome_atlas_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_rhizome_atlas_proto_rawDesc), len(file_api_rhizome_atlas_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

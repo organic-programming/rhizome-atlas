@@ -25,6 +25,15 @@ service RhizomeAtlasService {
 
   // Graph returns the dependency tree.
   rpc Graph(GraphRequest) returns (GraphResponse);
+
+  // Update updates dependencies to their latest compatible versions.
+  rpc Update(UpdateRequest) returns (UpdateResponse);
+
+  // Vendor copies cached dependencies to a local .holon/ directory.
+  rpc Vendor(VendorRequest) returns (VendorResponse);
+
+  // CleanCache purges the global holon cache (~/.holon/cache/).
+  rpc CleanCache(CleanCacheRequest) returns (CleanCacheResponse);
 }
 
 // --- Init ---
@@ -111,6 +120,45 @@ message Edge {
   string from = 1;
   string to = 2;
   string version = 3;
+}
+
+// --- Update ---
+
+message UpdateRequest {
+  // Directory containing holon.mod.
+  string directory = 1;
+}
+
+message UpdateResponse {
+  // Dependencies that were updated.
+  repeated UpdatedDependency updated = 1;
+}
+
+message UpdatedDependency {
+  string path = 1;
+  string old_version = 2;
+  string new_version = 3;
+}
+
+// --- Vendor ---
+
+message VendorRequest {
+  // Directory containing holon.mod.
+  string directory = 1;
+}
+
+message VendorResponse {
+  // Dependencies copied to .holon/.
+  repeated Dependency vendored = 1;
+}
+
+// --- CleanCache ---
+
+message CleanCacheRequest {}
+
+message CleanCacheResponse {
+  // Path that was purged.
+  string cache_path = 1;
 }
 
 // --- Common ---

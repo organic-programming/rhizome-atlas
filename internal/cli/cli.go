@@ -35,6 +35,16 @@ func Run(args []string) int {
 		return cmdVerify(ctx, srv, args[1:])
 	case "graph":
 		return cmdGraph(ctx, srv, args[1:])
+	case "update":
+		return cmdUpdate(ctx, srv, args[1:])
+	case "vendor":
+		return cmdVendor(ctx, srv, args[1:])
+	case "cache":
+		if len(args) > 1 && args[1] == "clean" {
+			return cmdCacheClean(ctx, srv)
+		}
+		fmt.Fprintln(os.Stderr, "usage: atlas cache clean")
+		return 1
 	case "help", "--help", "-h":
 		printUsage()
 		return 0
@@ -150,6 +160,47 @@ func cmdGraph(ctx context.Context, srv *server.Server, _ []string) int {
 	return 0
 }
 
+func cmdUpdate(ctx context.Context, srv *server.Server, _ []string) int {
+	resp, err := srv.Update(ctx, &pb.UpdateRequest{Directory: "."})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "atlas update: %v\n", err)
+		return 1
+	}
+	if len(resp.Updated) == 0 {
+		fmt.Println("all dependencies at latest compatible version")
+		return 0
+	}
+	for _, u := range resp.Updated {
+		fmt.Printf("  %s: %s → %s\n", u.Path, u.OldVersion, u.NewVersion)
+	}
+	return 0
+}
+
+func cmdVendor(ctx context.Context, srv *server.Server, _ []string) int {
+	resp, err := srv.Vendor(ctx, &pb.VendorRequest{Directory: "."})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "atlas vendor: %v\n", err)
+		return 1
+	}
+	for _, dep := range resp.Vendored {
+		fmt.Printf("  %s@%s → %s\n", dep.Path, dep.Version, dep.CachePath)
+	}
+	if len(resp.Vendored) == 0 {
+		fmt.Println("nothing to vendor")
+	}
+	return 0
+}
+
+func cmdCacheClean(ctx context.Context, srv *server.Server) int {
+	resp, err := srv.CleanCache(ctx, &pb.CleanCacheRequest{})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "atlas cache clean: %v\n", err)
+		return 1
+	}
+	fmt.Printf("purged %s\n", resp.CachePath)
+	return 0
+}
+
 func printUsage() {
 	fmt.Fprintf(os.Stderr, `Rhizome Atlas — holon dependency manager
 
@@ -161,8 +212,11 @@ Commands:
   add <path> <version>         add a dependency
   remove <path>                remove a dependency
   pull                         fetch all dependencies to cache
+  update                       update deps to latest compatible version
   verify                       check holon.sum integrity
   graph                        display dependency tree
+  vendor                       copy cached deps to local .holon/
+  cache clean                  purge the global cache
   serve [--listen <URI>]       start gRPC server
 
 `)
