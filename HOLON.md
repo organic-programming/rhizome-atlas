@@ -38,10 +38,10 @@ proto_status: draft
 
 ## Description
 
-Rhizome Atlas is the dependency manager for holons. She resolves, fetches,
+Rhizome Atlas is the dependency manager for holons. It resolves, fetches,
 caches, and verifies holon dependencies declared in `holon.mod`.
 
-She is named after the rhizome — a non-hierarchical root network where
+It is named after the rhizome — a non-hierarchical root network where
 any node can connect to any other — because holon dependencies form a
 graph, not a tree.
 
