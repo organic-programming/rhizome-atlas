@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package holon.rhizome_atlas;
+option go_package = "github.com/Organic-Programming/rhizome-atlas/proto";
+
+// RhizomeAtlasService manages holon dependencies.
+// It resolves, fetches, caches, and verifies dependencies
+// declared in holon.mod and holon.sum.
+service RhizomeAtlasService {
+
+  // Init creates a holon.mod file in the given directory.
+  rpc Init(InitRequest) returns (InitResponse);
+
+  // Add adds a dependency to holon.mod and fetches it.
+  rpc Add(AddRequest) returns (AddResponse);
+
+  // Remove removes a dependency from holon.mod.
+  rpc Remove(RemoveRequest) returns (RemoveResponse);
+
+  // Pull fetches all dependencies declared in holon.mod to the cache.
+  rpc Pull(PullRequest) returns (PullResponse);
+
+  // Verify checks holon.sum integrity against cached content.
+  rpc Verify(VerifyRequest) returns (VerifyResponse);
+
+  // Graph returns the dependency tree.
+  rpc Graph(GraphRequest) returns (GraphResponse);
+}
+
+// --- Init ---
+
+message InitRequest {
+  // Directory where holon.mod will be created.
+  string directory = 1;
+  // The holon path (e.g. "github.com/org/myholon").
+  string holon_path = 2;
+}
+
+message InitResponse {
+  // Path to the created holon.mod file.
+  string mod_file = 1;
+}
+
+// --- Add ---
+
+message AddRequest {
+  // Directory containing holon.mod.
+  string directory = 1;
+  // Dependency path (e.g. "github.com/org/dep").
+  string path = 2;
+  // Semantic version (e.g. "v1.2.0").
+  string version = 3;
+}
+
+message AddResponse {
+  // The dependency as recorded.
+  Dependency dependency = 1;
+}
+
+// --- Remove ---
+
+message RemoveRequest {
+  // Directory containing holon.mod.
+  string directory = 1;
+  // Dependency path to remove.
+  string path = 2;
+}
+
+message RemoveResponse {}
+
+// --- Pull ---
+
+message PullRequest {
+  // Directory containing holon.mod.
+  string directory = 1;
+}
+
+message PullResponse {
+  // Dependencies that were fetched or verified.
+  repeated Dependency fetched = 1;
+}
+
+// --- Verify ---
+
+message VerifyRequest {
+  // Directory containing holon.mod and holon.sum.
+  string directory = 1;
+}
+
+message VerifyResponse {
+  bool ok = 1;
+  // Non-empty if verification failed.
+  repeated string errors = 2;
+}
+
+// --- Graph ---
+
+message GraphRequest {
+  // Directory containing holon.mod.
+  string directory = 1;
+}
+
+message GraphResponse {
+  // The root holon path.
+  string root = 1;
+  // All edges in the dependency graph.
+  repeated Edge edges = 2;
+}
+
+message Edge {
+  string from = 1;
+  string to = 2;
+  string version = 3;
+}
+
+// --- Common ---
+
+message Dependency {
+  string path = 1;
+  string version = 2;
+  // Where this dependency was resolved to.
+  string cache_path = 3;
+}
