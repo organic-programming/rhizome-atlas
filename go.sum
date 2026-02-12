@@ -1,5 +1,5 @@
-github.com/Organic-Programming/go-holons v0.1.0 h1:PotC1POnoL6DQh7usZ9cBed7/7DsKWIPhar09efyixQ=
-github.com/Organic-Programming/go-holons v0.1.0/go.mod h1:ic6lS8kzFAIZBvBSZOHrU/RTfwt3dnOujM6qQt3Pr5k=
+github.com/Organic-Programming/go-holons v0.2.0 h1:PWqDahomT8NPRXJqVCXABBoGwiksNQOnH1Scgl+MiUo=
+github.com/Organic-Programming/go-holons v0.2.0/go.mod h1:qR+Hlh0JeWFlpO1iU65p1oeDo9kPEdT6z6O3KaINrl0=
 github.com/go-logr/logr v1.4.3 h1:CjnDlHq8ikf6E492q6eKboGOC0T8CDaOvkHCIg8idEI=
 github.com/go-logr/logr v1.4.3/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=
@@ -36,3 +36,5 @@ google.golang.org/grpc v1.78.0 h1:K1XZG/yGDJnzMdd/uZHAkVqJE+xIDOcmdSFZkBUicNc=
 google.golang.org/grpc v1.78.0/go.mod h1:I47qjTo4OKbMkjA/aOOwxDIiPSBofUtQUI5EfpWvW7U=
 google.golang.org/protobuf v1.36.10 h1:AYd7cD/uASjIL6Q9LiTjz8JLcrh/88q5UObnmY3aOOE=
 google.golang.org/protobuf v1.36.10/go.mod h1:HTf+CrKn2C3g5S8VImy6tdcUvCska2kB7j23XfzDpco=
+nhooyr.io/websocket v1.8.17 h1:KEVeLJkUywCKVsnLIDlD/5gtayKp8VoCkksHCGGfT9Y=
+nhooyr.io/websocket v1.8.17/go.mod h1:rN9OFWIUwuxg4fR5tELlYC04bXYowCP9GX47ivo2l+c=
