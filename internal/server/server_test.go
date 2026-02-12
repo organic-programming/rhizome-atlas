@@ -2,12 +2,20 @@ package server_test
 
 import (
 	"context"
+	"fmt"
+	"net"
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
+	"github.com/Organic-Programming/go-holons/pkg/transport"
 	"github.com/Organic-Programming/rhizome-atlas/internal/server"
 	pb "github.com/Organic-Programming/rhizome-atlas/proto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection"
+	"nhooyr.io/websocket"
 )
 
 func TestInitAddRemoveGraph(t *testing.T) {
@@ -163,5 +171,128 @@ func TestUpdateNoRemote(t *testing.T) {
 	}
 	if len(resp.Updated) != 0 {
 		t.Errorf("expected 0 updates for unreachable dep, got %d", len(resp.Updated))
+	}
+}
+
+// --- mem:// transport test ---
+
+func TestMemTransport(t *testing.T) {
+	dir := t.TempDir()
+	ctx := context.Background()
+
+	mem := transport.NewMemListener()
+	s := grpc.NewServer()
+	pb.RegisterRhizomeAtlasServiceServer(s, &server.Server{})
+	go func() { _ = s.Serve(mem) }()
+	defer s.Stop()
+
+	conn, err := grpc.NewClient(
+		"passthrough:///mem",
+		grpc.WithContextDialer(func(ctx context.Context, _ string) (net.Conn, error) {
+			return mem.Dial()
+		}),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
+
+	client := pb.NewRhizomeAtlasServiceClient(conn)
+
+	// Init over mem://
+	initResp, err := client.Init(ctx, &pb.InitRequest{
+		Directory: dir,
+		HolonPath: "test/mem-holon",
+	})
+	if err != nil {
+		t.Fatalf("Init over mem://: %v", err)
+	}
+	if initResp.ModFile == "" {
+		t.Error("expected mod_file path")
+	}
+
+	// Graph over mem://
+	graphResp, err := client.Graph(ctx, &pb.GraphRequest{Directory: dir})
+	if err != nil {
+		t.Fatalf("Graph over mem://: %v", err)
+	}
+	if graphResp.Root != "test/mem-holon" {
+		t.Errorf("root = %q", graphResp.Root)
+	}
+}
+
+// --- ws:// transport test ---
+
+func TestWSTransport(t *testing.T) {
+	dir := t.TempDir()
+	ctx := context.Background()
+
+	wsLis, err := transport.Listen("ws://127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("ws listen: %v", err)
+	}
+	defer wsLis.Close()
+
+	s := grpc.NewServer()
+	pb.RegisterRhizomeAtlasServiceServer(s, &server.Server{})
+	reflection.Register(s)
+	go func() { _ = s.Serve(wsLis) }()
+	defer s.Stop()
+
+	// Connect via WebSocket
+	wsAddr := wsLis.Addr().String()
+	dialCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	c, _, err := websocket.Dial(dialCtx, wsAddr, &websocket.DialOptions{
+		Subprotocols: []string{"grpc"},
+	})
+	if err != nil {
+		t.Fatalf("ws dial: %v", err)
+	}
+	wsConn := websocket.NetConn(dialCtx, c, websocket.MessageBinary)
+
+	dialed := false
+	//nolint:staticcheck
+	conn, err := grpc.DialContext(dialCtx,
+		"passthrough:///ws",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) {
+			if dialed {
+				return nil, fmt.Errorf("already consumed")
+			}
+			dialed = true
+			return wsConn, nil
+		}),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		wsConn.Close()
+		t.Fatalf("grpc dial over ws: %v", err)
+	}
+	defer conn.Close()
+
+	client := pb.NewRhizomeAtlasServiceClient(conn)
+
+	// Init over ws://
+	initResp, err := client.Init(ctx, &pb.InitRequest{
+		Directory: dir,
+		HolonPath: "test/ws-holon",
+	})
+	if err != nil {
+		t.Fatalf("Init over ws://: %v", err)
+	}
+	if initResp.ModFile == "" {
+		t.Error("expected mod_file path")
+	}
+
+	// Graph over ws://
+	graphResp, err := client.Graph(ctx, &pb.GraphRequest{Directory: dir})
+	if err != nil {
+		t.Fatalf("Graph over ws://: %v", err)
+	}
+	if graphResp.Root != "test/ws-holon" {
+		t.Errorf("root = %q", graphResp.Root)
 	}
 }
