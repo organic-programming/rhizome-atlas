@@ -1,6 +1,6 @@
 ---
 # Holon Identity v1
-uuid: "00000000-0000-4000-0000-000000000002"
+uuid: "607239ea-41fd-4955-a828-9478ce866637"
 given_name: "Rhizome"
 family_name: "Atlas"
 motto: "Know what you need."
@@ -10,7 +10,7 @@ status: draft
 born: "2026-02-12"
 
 # Lineage
-parents: ["00000000-0000-4000-0000-000000000001"]
+parents: ["b00932e5-49d4-4724-ab4b-e2fc9e22e108"]
 reproduction: "manual"
 
 # Pinning
