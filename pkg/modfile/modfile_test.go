@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Organic-Programming/rhizome-atlas/pkg/modfile"
+	"github.com/organic-programming/rhizome-atlas/pkg/modfile"
 )
 
 func TestParseAndWrite(t *testing.T) {

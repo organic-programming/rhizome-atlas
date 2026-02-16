@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Organic-Programming/go-holons/pkg/transport"
-	"github.com/Organic-Programming/rhizome-atlas/internal/server"
-	pb "github.com/Organic-Programming/rhizome-atlas/proto"
+	"github.com/organic-programming/go-holons/pkg/transport"
+	"github.com/organic-programming/rhizome-atlas/internal/server"
+	pb "github.com/organic-programming/rhizome-atlas/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
@@ -117,7 +117,7 @@ func TestVendorAndCleanCache(t *testing.T) {
 	srv.Init(ctx, &pb.InitRequest{Directory: dir, HolonPath: "test/vendor"}) //nolint:errcheck
 	srv.Add(ctx, &pb.AddRequest{
 		Directory: dir,
-		Path:      "github.com/Organic-Programming/go-holons",
+		Path:      "github.com/organic-programming/go-holons",
 		Version:   "v0.1.0",
 	}) //nolint:errcheck
 

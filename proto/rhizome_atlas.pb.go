@@ -1123,7 +1123,7 @@ const file_api_rhizome_atlas_proto_rawDesc = "" +
 	"\x06Update\x12\".holon.rhizome_atlas.UpdateRequest\x1a#.holon.rhizome_atlas.UpdateResponse\x12Q\n" +
 	"\x06Vendor\x12\".holon.rhizome_atlas.VendorRequest\x1a#.holon.rhizome_atlas.VendorResponse\x12]\n" +
 	"\n" +
-	"CleanCache\x12&.holon.rhizome_atlas.CleanCacheRequest\x1a'.holon.rhizome_atlas.CleanCacheResponseB4Z2github.com/Organic-Programming/rhizome-atlas/protob\x06proto3"
+	"CleanCache\x12&.holon.rhizome_atlas.CleanCacheRequest\x1a'.holon.rhizome_atlas.CleanCacheResponseB4Z2github.com/organic-programming/rhizome-atlas/protob\x06proto3"
 
 var (
 	file_api_rhizome_atlas_proto_rawDescOnce sync.Once

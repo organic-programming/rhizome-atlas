@@ -15,9 +15,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Organic-Programming/go-holons/pkg/serve"
-	"github.com/Organic-Programming/rhizome-atlas/pkg/modfile"
-	pb "github.com/Organic-Programming/rhizome-atlas/proto"
+	"github.com/organic-programming/go-holons/pkg/serve"
+	"github.com/organic-programming/rhizome-atlas/pkg/modfile"
+	pb "github.com/organic-programming/rhizome-atlas/proto"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

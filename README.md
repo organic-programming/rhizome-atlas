@@ -50,11 +50,11 @@ atlas serve [--listen <URI>]   — start gRPC server
 
 ## Organic Programming
 
-This holon is part of the [Organic Programming](https://github.com/Organic-Programming/seed)
+This holon is part of the [Organic Programming](https://github.com/organic-programming/seed)
 ecosystem. For context, see:
 
-- [Constitution](https://github.com/Organic-Programming/seed/blob/master/AGENT.md) — what a holon is
-- [Methodology](https://github.com/Organic-Programming/seed/blob/master/METHODOLOGY.md) — how to develop with holons
-- [Terminology](https://github.com/Organic-Programming/seed/blob/master/TERMINOLOGY.md) — glossary of all terms
-- [Dependencies](https://github.com/Organic-Programming/seed/blob/master/DEPENDENCIES.md) — holon.mod & holon.sum specification
+- [Constitution](https://github.com/organic-programming/seed/blob/master/AGENT.md) — what a holon is
+- [Methodology](https://github.com/organic-programming/seed/blob/master/METHODOLOGY.md) — how to develop with holons
+- [Terminology](https://github.com/organic-programming/seed/blob/master/TERMINOLOGY.md) — glossary of all terms
+- [Dependencies](https://github.com/organic-programming/seed/blob/master/DEPENDENCIES.md) — holon.mod & holon.sum specification
 
