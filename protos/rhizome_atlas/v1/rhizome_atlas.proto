@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package holon.rhizome_atlas;
-option go_package = "github.com/organic-programming/rhizome-atlas/proto";
+package rhizome_atlas.v1;
+option go_package = "github.com/organic-programming/rhizome-atlas/gen/go/rhizome_atlas/v1;rhizomeatlasv1";
 
 // RhizomeAtlasService manages holon dependencies.
 // It resolves, fetches, caches, and verifies dependencies

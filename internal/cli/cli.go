@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"os"
 
+	pb "github.com/organic-programming/rhizome-atlas/gen/go/rhizome_atlas/v1"
 	"github.com/organic-programming/rhizome-atlas/internal/server"
-	pb "github.com/organic-programming/rhizome-atlas/proto"
 )
 
 // Run executes the CLI with the given arguments.

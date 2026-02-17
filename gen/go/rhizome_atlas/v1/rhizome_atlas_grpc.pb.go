@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v6.33.4
-// source: api/rhizome_atlas.proto
+// source: protos/rhizome_atlas/v1/rhizome_atlas.proto
 
-package proto
+package rhizomeatlasv1
 
 import (
 	context "context"
@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RhizomeAtlasService_Init_FullMethodName       = "/holon.rhizome_atlas.RhizomeAtlasService/Init"
-	RhizomeAtlasService_Add_FullMethodName        = "/holon.rhizome_atlas.RhizomeAtlasService/Add"
-	RhizomeAtlasService_Remove_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Remove"
-	RhizomeAtlasService_Pull_FullMethodName       = "/holon.rhizome_atlas.RhizomeAtlasService/Pull"
-	RhizomeAtlasService_Verify_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Verify"
-	RhizomeAtlasService_Graph_FullMethodName      = "/holon.rhizome_atlas.RhizomeAtlasService/Graph"
-	RhizomeAtlasService_Update_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Update"
-	RhizomeAtlasService_Vendor_FullMethodName     = "/holon.rhizome_atlas.RhizomeAtlasService/Vendor"
-	RhizomeAtlasService_CleanCache_FullMethodName = "/holon.rhizome_atlas.RhizomeAtlasService/CleanCache"
+	RhizomeAtlasService_Init_FullMethodName       = "/rhizome_atlas.v1.RhizomeAtlasService/Init"
+	RhizomeAtlasService_Add_FullMethodName        = "/rhizome_atlas.v1.RhizomeAtlasService/Add"
+	RhizomeAtlasService_Remove_FullMethodName     = "/rhizome_atlas.v1.RhizomeAtlasService/Remove"
+	RhizomeAtlasService_Pull_FullMethodName       = "/rhizome_atlas.v1.RhizomeAtlasService/Pull"
+	RhizomeAtlasService_Verify_FullMethodName     = "/rhizome_atlas.v1.RhizomeAtlasService/Verify"
+	RhizomeAtlasService_Graph_FullMethodName      = "/rhizome_atlas.v1.RhizomeAtlasService/Graph"
+	RhizomeAtlasService_Update_FullMethodName     = "/rhizome_atlas.v1.RhizomeAtlasService/Update"
+	RhizomeAtlasService_Vendor_FullMethodName     = "/rhizome_atlas.v1.RhizomeAtlasService/Vendor"
+	RhizomeAtlasService_CleanCache_FullMethodName = "/rhizome_atlas.v1.RhizomeAtlasService/CleanCache"
 )
 
 // RhizomeAtlasServiceClient is the client API for RhizomeAtlasService service.
@@ -406,7 +406,7 @@ func _RhizomeAtlasService_CleanCache_Handler(srv interface{}, ctx context.Contex
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RhizomeAtlasService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "holon.rhizome_atlas.RhizomeAtlasService",
+	ServiceName: "rhizome_atlas.v1.RhizomeAtlasService",
 	HandlerType: (*RhizomeAtlasServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -447,5 +447,5 @@ var RhizomeAtlasService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/rhizome_atlas.proto",
+	Metadata: "protos/rhizome_atlas/v1/rhizome_atlas.proto",
 }

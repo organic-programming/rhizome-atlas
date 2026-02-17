@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/organic-programming/go-holons/pkg/transport"
+	pb "github.com/organic-programming/rhizome-atlas/gen/go/rhizome_atlas/v1"
 	"github.com/organic-programming/rhizome-atlas/internal/server"
-	pb "github.com/organic-programming/rhizome-atlas/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
