@@ -1,0 +1,4 @@
+# Tools rhizome-atlas is authorized to invoke
+go
+git
+protoc
